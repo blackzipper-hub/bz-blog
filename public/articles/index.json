@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "slug": "welcome-to-my-blog",
+    "filename": "welcome-to-my-blog.md",
+    "status": "published"
+  },
+  {
+    "id": 2,
+    "slug": "react-hooks-guide",
+    "filename": "react-hooks-guide.md",
+    "status": "published"
+  },
+  {
+    "id": 3,
+    "slug": "nodejs-setup-guide",
+    "filename": "nodejs-setup-guide.md",
+    "status": "published"
+  },
+  {
+    "id": 4,
+    "slug": "my-programming-journey",
+    "filename": "my-programming-journey.md",
+    "status": "published"
+  }
+]
