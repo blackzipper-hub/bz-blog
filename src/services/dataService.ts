@@ -45,31 +45,73 @@ class DataService {
     if (this.initialized) return;
 
     try {
-      // 获取正确的基础路径
-      const baseUrl = process.env.PUBLIC_URL || '';
+      // 获取正确的基础路径 - 支持多种检测方式
+      let baseUrl = process.env.PUBLIC_URL || '';
+      
+      // 如果在GitHub Pages上，确保路径正确
+      if (window.location.hostname.includes('github.io')) {
+        const pathSegments = window.location.pathname.split('/').filter(Boolean);
+        if (pathSegments.length > 0 && pathSegments[0] === 'bz-blog') {
+          baseUrl = '/bz-blog';
+        }
+      }
+      
+      console.log('🚀 DataService initialize - BASE_URL:', baseUrl);
+      console.log('🚀 Current location:', window.location.href);
+      console.log('🚀 Hostname:', window.location.hostname);
+      console.log('🚀 Pathname:', window.location.pathname);
       
       // 加载文章索引
-      const articlesIndexResponse = await fetch(`${baseUrl}/articles/index.json`);
+      const indexUrl = `${baseUrl}/articles/index.json`;
+      console.log('📋 Fetching articles index from:', indexUrl);
+      const articlesIndexResponse = await fetch(indexUrl);
+      console.log('📋 Articles index response status:', articlesIndexResponse.status);
+      
+      if (!articlesIndexResponse.ok) {
+        throw new Error(`Failed to fetch articles index: ${articlesIndexResponse.status} ${articlesIndexResponse.statusText}`);
+      }
+      
       const articlesIndex: ArticleIndex[] = await articlesIndexResponse.json();
+      console.log('📋 Loaded articles index:', articlesIndex);
 
       // 加载分类和标签数据
+      const categoriesUrl = `${baseUrl}/data/categories.json`;
+      const tagsUrl = `${baseUrl}/data/tags.json`;
+      console.log('🏷️ Fetching categories from:', categoriesUrl);
+      console.log('🔖 Fetching tags from:', tagsUrl);
+      
       const [categoriesResponse, tagsResponse] = await Promise.all([
-        fetch(`${baseUrl}/data/categories.json`),
-        fetch(`${baseUrl}/data/tags.json`)
+        fetch(categoriesUrl),
+        fetch(tagsUrl)
       ]);
+
+      console.log('🏷️ Categories response status:', categoriesResponse.status);
+      console.log('🔖 Tags response status:', tagsResponse.status);
 
       this.categories = await categoriesResponse.json();
       this.tags = await tagsResponse.json();
+      console.log('🏷️ Loaded categories:', this.categories.length);
+      console.log('🔖 Loaded tags:', this.tags.length);
 
       // 加载所有Markdown文章
-      const articlesPromises = articlesIndex.map(async (articleInfo) => {
+      console.log('📝 Starting to load articles, count:', articlesIndex.length);
+      const articlesPromises = articlesIndex.map(async (articleInfo, index) => {
         try {
-          const response = await fetch(`${baseUrl}/articles/${articleInfo.filename}`);
+          const articleUrl = `${baseUrl}/articles/${articleInfo.filename}`;
+          console.log(`📄 [${index + 1}/${articlesIndex.length}] Loading article from:`, articleUrl);
+          const response = await fetch(articleUrl);
+          console.log(`📄 Article ${articleInfo.filename} response status:`, response.status);
+          
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          }
+          
           const markdownContent = await response.text();
           const article = parseMarkdownArticle(markdownContent, articleInfo.id);
+          console.log(`✅ Successfully loaded article: ${article.title}`);
           return article;
         } catch (error) {
-          console.warn(`Failed to load article: ${articleInfo.filename}`, error);
+          console.error(`❌ Failed to load article: ${articleInfo.filename}`, error);
           return null;
         }
       });
@@ -78,7 +120,7 @@ class DataService {
       this.articles = loadedArticles.filter((article): article is Article => article !== null);
       
       this.initialized = true;
-      console.log(`Loaded ${this.articles.length} articles from Markdown files`);
+      console.log(`🎉 DataService initialization complete! Loaded ${this.articles.length} articles from Markdown files`);
     } catch (error) {
       console.error('Failed to load data:', error);
       throw error;
