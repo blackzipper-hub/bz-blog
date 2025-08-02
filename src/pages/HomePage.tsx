@@ -276,11 +276,28 @@ const HomePage: React.FC = () => {
 
   // 从URL参数获取筛选条件
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const search = params.get('search') || '';
-    setSearchQuery(search);
-    setSelectedCategory(category || '');
-    setSelectedTag(tag || '');
+    const loadUrlParams = async () => {
+      const params = new URLSearchParams(location.search);
+      const search = params.get('search') || '';
+      setSearchQuery(search);
+      
+      // 将slug转换为名称
+      if (category) {
+        const categoryName = await dataService.getCategoryNameBySlugAsync(category);
+        setSelectedCategory(categoryName || '');
+      } else {
+        setSelectedCategory('');
+      }
+      
+      if (tag) {
+        const tagName = await dataService.getTagNameBySlugAsync(tag);
+        setSelectedTag(tagName || '');
+      } else {
+        setSelectedTag('');
+      }
+    };
+    
+    loadUrlParams();
   }, [location.search, category, tag]);
 
   // 加载分类和标签
@@ -308,12 +325,16 @@ const HomePage: React.FC = () => {
       setError(null);
 
       try {
+        // 将名称转换为slug传递给dataService
+        const categorySlug = selectedCategory ? dataService.getCategorySlugByName(selectedCategory) : '';
+        const tagSlug = selectedTag ? dataService.getTagSlugByName(selectedTag) : '';
+        
         const result = await dataService.getArticles({
           page: currentPage,
           limit: 10,
           search: searchQuery,
-          category: selectedCategory,
-          tag: selectedTag
+          category: categorySlug || undefined,
+          tag: tagSlug || undefined
         });
 
         setArticles(result.articles);
@@ -338,24 +359,30 @@ const HomePage: React.FC = () => {
   };
 
   const handleCategoryFilter = (categoryName: string) => {
-    setSelectedCategory(categoryName === selectedCategory ? '' : categoryName);
+    const categorySlug = dataService.getCategorySlugByName(categoryName);
+    const newSelectedCategory = categoryName === selectedCategory ? '' : categoryName;
+    
+    setSelectedCategory(newSelectedCategory);
     setSelectedTag('');
     setCurrentPage(1);
     
-    if (categoryName && categoryName !== selectedCategory) {
-      window.history.pushState({}, '', `/category/${encodeURIComponent(categoryName)}`);
+    if (newSelectedCategory && categorySlug) {
+      window.history.pushState({}, '', `/category/${categorySlug}`);
     } else {
       window.history.pushState({}, '', '/');
     }
   };
 
   const handleTagFilter = (tagName: string) => {
-    setSelectedTag(tagName === selectedTag ? '' : tagName);
+    const tagSlug = dataService.getTagSlugByName(tagName);
+    const newSelectedTag = tagName === selectedTag ? '' : tagName;
+    
+    setSelectedTag(newSelectedTag);
     setSelectedCategory('');
     setCurrentPage(1);
     
-    if (tagName && tagName !== selectedTag) {
-      window.history.pushState({}, '', `/tag/${encodeURIComponent(tagName)}`);
+    if (newSelectedTag && tagSlug) {
+      window.history.pushState({}, '', `/tag/${tagSlug}`);
     } else {
       window.history.pushState({}, '', '/');
     }

@@ -17,12 +17,14 @@ export interface Article {
 export interface Category {
   id: number;
   name: string;
+  slug: string;
   count: number;
 }
 
 export interface Tag {
   id: number;
   name: string;
+  slug: string;
   count: number;
 }
 
@@ -88,18 +90,24 @@ class DataService {
       );
     }
 
-    // 分类筛选
+    // 分类筛选 - 通过slug查找分类名称
     if (filters?.category) {
-      filteredArticles = filteredArticles.filter(article =>
-        article.categories.includes(filters.category!)
-      );
+      const categoryName = this.getCategoryNameBySlug(filters.category);
+      if (categoryName) {
+        filteredArticles = filteredArticles.filter(article =>
+          article.categories.includes(categoryName)
+        );
+      }
     }
 
-    // 标签筛选
+    // 标签筛选 - 通过slug查找标签名称
     if (filters?.tag) {
-      filteredArticles = filteredArticles.filter(article =>
-        article.tags.includes(filters.tag!)
-      );
+      const tagName = this.getTagNameBySlug(filters.tag);
+      if (tagName) {
+        filteredArticles = filteredArticles.filter(article =>
+          article.tags.includes(tagName)
+        );
+      }
     }
 
     // 按日期排序（最新在前）
@@ -223,6 +231,42 @@ class DataService {
       categories: article.categories,
       tags: article.tags
     }));
+  }
+
+  // 根据slug获取分类名称
+  private getCategoryNameBySlug(slug: string): string | null {
+    const category = this.categories.find(cat => cat.slug === slug);
+    return category ? category.name : null;
+  }
+
+  // 根据slug获取标签名称
+  private getTagNameBySlug(slug: string): string | null {
+    const tag = this.tags.find(t => t.slug === slug);
+    return tag ? tag.name : null;
+  }
+
+  // 根据slug获取分类名称 (public)
+  async getCategoryNameBySlugAsync(slug: string): Promise<string | null> {
+    await this.initialize();
+    return this.getCategoryNameBySlug(slug);
+  }
+
+  // 根据slug获取标签名称 (public)  
+  async getTagNameBySlugAsync(slug: string): Promise<string | null> {
+    await this.initialize();
+    return this.getTagNameBySlug(slug);
+  }
+
+  // 根据名称获取分类slug
+  getCategorySlugByName(name: string): string | null {
+    const category = this.categories.find(cat => cat.name === name);
+    return category ? category.slug : null;
+  }
+
+  // 根据名称获取标签slug
+  getTagSlugByName(name: string): string | null {
+    const tag = this.tags.find(t => t.name === name);
+    return tag ? tag.slug : null;
   }
 }
 
