@@ -1,5 +1,5 @@
 // 静态博客数据服务 - 支持Markdown文件
-import { parseMarkdownArticle, ParsedArticle } from '../utils/markdownParser';
+import { parseMarkdownArticle } from '../utils/markdownParser';
 
 export interface Article {
   id: number;
@@ -45,14 +45,17 @@ class DataService {
     if (this.initialized) return;
 
     try {
+      // 获取正确的基础路径
+      const baseUrl = process.env.PUBLIC_URL || '';
+      
       // 加载文章索引
-      const articlesIndexResponse = await fetch('/articles/index.json');
+      const articlesIndexResponse = await fetch(`${baseUrl}/articles/index.json`);
       const articlesIndex: ArticleIndex[] = await articlesIndexResponse.json();
 
       // 加载分类和标签数据
       const [categoriesResponse, tagsResponse] = await Promise.all([
-        fetch('/data/categories.json'),
-        fetch('/data/tags.json')
+        fetch(`${baseUrl}/data/categories.json`),
+        fetch(`${baseUrl}/data/tags.json`)
       ]);
 
       this.categories = await categoriesResponse.json();
@@ -61,7 +64,7 @@ class DataService {
       // 加载所有Markdown文章
       const articlesPromises = articlesIndex.map(async (articleInfo) => {
         try {
-          const response = await fetch(`/articles/${articleInfo.filename}`);
+          const response = await fetch(`${baseUrl}/articles/${articleInfo.filename}`);
           const markdownContent = await response.text();
           const article = parseMarkdownArticle(markdownContent, articleInfo.id);
           return article;
