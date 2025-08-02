@@ -2,25 +2,25 @@
   {
     "id": 1,
     "slug": "welcome-to-my-blog",
-    "filename": "welcome-to-my-blog.txt",
+    "filename": "welcome-to-my-blog.dat",
     "status": "published"
   },
   {
     "id": 2,
     "slug": "react-hooks-guide",
-    "filename": "react-hooks-guide.txt",
+    "filename": "react-hooks-guide.dat",
     "status": "published"
   },
   {
     "id": 3,
     "slug": "nodejs-setup-guide",
-    "filename": "nodejs-setup-guide.txt",
+    "filename": "nodejs-setup-guide.dat",
     "status": "published"
   },
   {
     "id": 4,
     "slug": "my-programming-journey",
-    "filename": "my-programming-journey.txt",
+    "filename": "my-programming-journey.dat",
     "status": "published"
   }
 ]
