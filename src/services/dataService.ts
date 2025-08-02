@@ -56,16 +56,6 @@ class DataService {
       this.categories = await categoriesResponse.json();
       this.tags = await tagsResponse.json();
       
-      // 调试信息
-      console.log('🎯 Loaded articles details:', this.articles.map(a => ({
-        id: a.id, 
-        title: a.title, 
-        status: a.status,
-        categories: a.categories,
-        tags: a.tags,
-        excerpt: a.excerpt?.substring(0, 50) + '...'
-      })));
-      
       this.initialized = true;
     } catch (error) {
       console.error('Failed to load data:', error);
@@ -83,14 +73,10 @@ class DataService {
   }) {
     await this.initialize();
 
-    console.log('🔍 getArticles called with filters:', filters);
-    console.log('📚 Total articles loaded:', this.articles.length);
-
     let filteredArticles = [...this.articles];
 
     // 筛选已发布的文章
     filteredArticles = filteredArticles.filter(article => article.status === 'published');
-    console.log('📰 Published articles:', filteredArticles.length);
 
     // 搜索筛选
     if (filters?.search) {
@@ -125,13 +111,6 @@ class DataService {
     const startIndex = (page - 1) * limit;
     const endIndex = startIndex + limit;
     const paginatedArticles = filteredArticles.slice(startIndex, endIndex);
-
-    console.log('📄 Final result:', {
-      totalFiltered: filteredArticles.length,
-      paginated: paginatedArticles.length,
-      page,
-      totalPages: Math.ceil(filteredArticles.length / limit)
-    });
 
     return {
       articles: paginatedArticles,
