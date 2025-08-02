@@ -1,0 +1,54 @@
+[
+  {
+    "id": 1,
+    "title": "欢迎来到个人博客",
+    "content": "# 欢迎来到我的个人博客\n\n这是我的第一篇博客文章！在这里我会分享：\n\n## 技术文章\n- 前端开发经验\n- React 和 Node.js 教程\n- 编程最佳实践\n\n## 生活感悟\n- 日常思考\n- 读书笔记\n- 旅行见闻\n\n## 学习心得\n- 新技术探索\n- 项目经验总结\n- 问题解决方案\n\n感谢您访问我的博客，希望这些内容对您有所帮助！\n\n---\n\n*这是一篇使用 Markdown 格式编写的文章示例。*",
+    "excerpt": "欢迎来到我的个人博客！这里将分享技术文章、生活感悟和学习心得。",
+    "slug": "welcome-to-my-blog",
+    "status": "published",
+    "categories": ["公告", "个人"],
+    "tags": ["欢迎", "博客", "介绍"],
+    "date": "2024-01-15",
+    "views": 128,
+    "author": "博主"
+  },
+  {
+    "id": 2,
+    "title": "React Hooks 详解与实践",
+    "content": "# React Hooks 详解与实践\n\nReact Hooks 是 React 16.8 引入的重要特性，它让我们能够在函数组件中使用状态和其他 React 特性。\n\n## 什么是 Hooks？\n\nHooks 是一些特殊的函数，它们让你可以\"钩入\" React 特性。例如，`useState` 是一个 Hook，它可以让你在函数组件中添加状态。\n\n## 常用的 Hooks\n\n### useState\n```javascript\nimport React, { useState } from 'react';\n\nfunction Counter() {\n  const [count, setCount] = useState(0);\n\n  return (\n    <div>\n      <p>你点击了 {count} 次</p>\n      <button onClick={() => setCount(count + 1)}>\n        点击我\n      </button>\n    </div>\n  );\n}\n```\n\n### useEffect\n```javascript\nimport React, { useState, useEffect } from 'react';\n\nfunction Example() {\n  const [count, setCount] = useState(0);\n\n  useEffect(() => {\n    document.title = `你点击了 ${count} 次`;\n  });\n\n  return (\n    <div>\n      <p>你点击了 {count} 次</p>\n      <button onClick={() => setCount(count + 1)}>\n        点击我\n      </button>\n    </div>\n  );\n}\n```\n\n## 自定义 Hooks\n\n我们还可以创建自定义 Hooks 来复用状态逻辑：\n\n```javascript\nfunction useCounter(initialValue = 0) {\n  const [count, setCount] = useState(initialValue);\n\n  const increment = () => setCount(count + 1);\n  const decrement = () => setCount(count - 1);\n  const reset = () => setCount(initialValue);\n\n  return { count, increment, decrement, reset };\n}\n```\n\n## 最佳实践\n\n1. 只在函数的最顶层调用 Hook\n2. 不要在循环、条件或嵌套函数中调用 Hook\n3. 只在 React 函数中调用 Hook\n4. 使用 ESLint 插件来强制执行 Hook 规则\n\nHooks 让 React 组件更加简洁和易于理解，是现代 React 开发的重要工具！",
+    "excerpt": "深入了解 React Hooks 的使用方法和最佳实践，包括 useState、useEffect 和自定义 Hooks。",
+    "slug": "react-hooks-guide",
+    "status": "published",
+    "categories": ["技术", "前端"],
+    "tags": ["React", "JavaScript", "Hooks", "前端开发"],
+    "date": "2024-01-20",
+    "views": 256,
+    "author": "博主"
+  },
+  {
+    "id": 3,
+    "title": "Node.js 开发环境搭建指南",
+    "content": "# Node.js 开发环境搭建指南\n\nNode.js 是一个基于 Chrome V8 引擎的 JavaScript 运行时环境，让我们可以在服务器端运行 JavaScript。\n\n## 安装 Node.js\n\n### 方法一：官网下载\n1. 访问 [Node.js 官网](https://nodejs.org/)\n2. 下载 LTS 版本（推荐）\n3. 按照安装向导完成安装\n\n### 方法二：使用包管理器\n\n#### macOS\n```bash\n# 使用 Homebrew\nbrew install node\n\n# 使用 MacPorts\nsudo port install nodejs18\n```\n\n#### Ubuntu/Debian\n```bash\n# 更新包索引\nsudo apt update\n\n# 安装 Node.js\nsudo apt install nodejs npm\n```\n\n#### Windows\n```bash\n# 使用 Chocolatey\nchoco install nodejs\n\n# 使用 Scoop\nscoop install nodejs\n```\n\n## 版本管理\n\n推荐使用 Node Version Manager (nvm) 来管理多个 Node.js 版本：\n\n```bash\n# 安装 nvm (Linux/macOS)\ncurl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash\n\n# 安装最新 LTS 版本\nnvm install --lts\n\n# 使用特定版本\nnvm use 18.17.0\n\n# 列出已安装版本\nnvm list\n```\n\n## 包管理器\n\n### npm (Node Package Manager)\n```bash\n# 初始化项目\nnpm init -y\n\n# 安装依赖\nnpm install express\n\n# 全局安装\nnpm install -g nodemon\n\n# 查看已安装包\nnpm list\n```\n\n### yarn (可选)\n```bash\n# 安装 yarn\nnpm install -g yarn\n\n# 初始化项目\nyarn init -y\n\n# 安装依赖\nyarn add express\n\n# 全局安装\nyarn global add nodemon\n```\n\n## 开发工具推荐\n\n1. **IDE/编辑器**\n   - Visual Studio Code\n   - WebStorm\n   - Atom\n\n2. **调试工具**\n   - Node.js Inspector\n   - VS Code Debugger\n   - Chrome DevTools\n\n3. **实用工具**\n   - nodemon (自动重启)\n   - pm2 (进程管理)\n   - ESLint (代码检查)\n\n## 第一个 Node.js 应用\n\n创建 `app.js`：\n\n```javascript\nconst http = require('http');\n\nconst server = http.createServer((req, res) => {\n  res.writeHead(200, { 'Content-Type': 'text/plain' });\n  res.end('Hello, Node.js!');\n});\n\nconst PORT = process.env.PORT || 3000;\nserver.listen(PORT, () => {\n  console.log(`服务器运行在端口 ${PORT}`);\n});\n```\n\n运行应用：\n```bash\nnode app.js\n```\n\n现在你的 Node.js 开发环境就搭建完成了！",
+    "excerpt": "完整的 Node.js 开发环境搭建指南，包括安装、版本管理、包管理器和开发工具推荐。",
+    "slug": "nodejs-setup-guide",
+    "status": "published",
+    "categories": ["技术", "后端"],
+    "tags": ["Node.js", "JavaScript", "开发环境", "教程"],
+    "date": "2024-01-25",
+    "views": 189,
+    "author": "博主"
+  },
+  {
+    "id": 4,
+    "title": "我的编程学习之路",
+    "content": "# 我的编程学习之路\n\n回顾我的编程学习历程，有很多感悟想要分享。\n\n## 起步阶段\n\n最初接触编程是在大学时期，第一门语言是 C 语言。记得当时写第一个 \"Hello World\" 程序时的兴奋心情。\n\n### 遇到的困难\n- 语法错误总是找不到\n- 指针概念难以理解\n- 调试技能不足\n\n### 克服方法\n- 大量练习基础语法\n- 画图理解内存结构\n- 学会使用调试器\n\n## 深入学习\n\n随着学习的深入，我开始接触更多的编程语言和技术：\n\n### Web 开发\n- HTML/CSS：网页的骨架和样式\n- JavaScript：让网页动起来\n- React：现代前端框架\n\n### 后端技术\n- Node.js：JavaScript 服务器端运行\n- 数据库：MySQL、MongoDB\n- API 设计：RESTful、GraphQL\n\n## 实践项目\n\n理论学习很重要，但实践更重要。我做过的一些项目：\n\n1. **个人博客** - 第一个完整的全栈项目\n2. **待办事项应用** - 学习状态管理\n3. **电商网站** - 复杂业务逻辑处理\n\n## 学习心得\n\n### 持续学习\n技术更新很快，需要保持学习的热情：\n- 关注技术博客和社区\n- 参加技术会议和聚会\n- 尝试新的技术和工具\n\n### 实践导向\n- 边学边做，理论结合实践\n- 不要害怕犯错，错误是最好的老师\n- 多看优秀的开源项目代码\n\n### 交流分享\n- 参与开源项目\n- 写技术博客分享经验\n- 帮助其他学习者\n\n## 给初学者的建议\n\n1. **打好基础** - 不要急于学习框架，先掌握基础语言\n2. **多写代码** - 纸上得来终觉浅，绝知此事要躬行\n3. **善用工具** - 学会使用 IDE、调试器、版本控制\n4. **保持耐心** - 编程学习是一个长期过程\n5. **享受过程** - 编程是一门艺术，要享受创造的乐趣\n\n## 未来规划\n\n- 深入学习云原生技术\n- 探索人工智能和机器学习\n- 提升系统设计能力\n- 继续分享和帮助他人\n\n编程改变了我的人生，希望每个学习编程的人都能在这条路上找到属于自己的精彩！",
+    "excerpt": "分享我的编程学习历程，从初学者到现在的心得体会，以及给新手的一些建议。",
+    "slug": "my-programming-journey",
+    "status": "published",
+    "categories": ["个人", "学习"],
+    "tags": ["编程", "学习", "经验分享", "成长"],
+    "date": "2024-01-30",
+    "views": 342,
+    "author": "博主"
+  }
+]
