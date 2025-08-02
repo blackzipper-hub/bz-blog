@@ -58,6 +58,9 @@ class DataService {
       this.categories = await categoriesResponse.json();
       this.tags = await tagsResponse.json();
       
+      console.log('🏷️ Loaded categories with slugs:', this.categories);
+      console.log('🔖 Loaded tags with slugs:', this.tags);
+      
       this.initialized = true;
     } catch (error) {
       console.error('Failed to load data:', error);
@@ -260,12 +263,14 @@ class DataService {
   // 根据名称获取分类slug
   getCategorySlugByName(name: string): string | null {
     const category = this.categories.find(cat => cat.name === name);
+    console.log('🔍 getCategorySlugByName:', { name, found: category, slug: category?.slug });
     return category ? category.slug : null;
   }
 
   // 根据名称获取标签slug
   getTagSlugByName(name: string): string | null {
     const tag = this.tags.find(t => t.name === name);
+    console.log('🔍 getTagSlugByName:', { name, found: tag, slug: tag?.slug });
     return tag ? tag.slug : null;
   }
 }

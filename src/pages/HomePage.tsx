@@ -362,12 +362,16 @@ const HomePage: React.FC = () => {
     const categorySlug = dataService.getCategorySlugByName(categoryName);
     const newSelectedCategory = categoryName === selectedCategory ? '' : categoryName;
     
+    console.log('🏷️ Category Filter:', { categoryName, categorySlug, newSelectedCategory });
+    
     setSelectedCategory(newSelectedCategory);
     setSelectedTag('');
     setCurrentPage(1);
     
     if (newSelectedCategory && categorySlug) {
-      window.history.pushState({}, '', `/category/${categorySlug}`);
+      const newUrl = `/category/${categorySlug}`;
+      console.log('🌐 Navigating to:', newUrl);
+      window.history.pushState({}, '', newUrl);
     } else {
       window.history.pushState({}, '', '/');
     }
@@ -377,12 +381,16 @@ const HomePage: React.FC = () => {
     const tagSlug = dataService.getTagSlugByName(tagName);
     const newSelectedTag = tagName === selectedTag ? '' : tagName;
     
+    console.log('🔖 Tag Filter:', { tagName, tagSlug, newSelectedTag });
+    
     setSelectedTag(newSelectedTag);
     setSelectedCategory('');
     setCurrentPage(1);
     
     if (newSelectedTag && tagSlug) {
-      window.history.pushState({}, '', `/tag/${tagSlug}`);
+      const newUrl = `/tag/${tagSlug}`;
+      console.log('🌐 Navigating to:', newUrl);
+      window.history.pushState({}, '', newUrl);
     } else {
       window.history.pushState({}, '', '/');
     }
