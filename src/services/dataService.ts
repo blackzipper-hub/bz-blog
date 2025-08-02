@@ -1,5 +1,4 @@
-// 静态博客数据服务 - 支持Markdown文件
-import { parseMarkdownArticle } from '../utils/markdownParser';
+// 静态博客数据服务 - 从JSON文件加载
 
 export interface Article {
   id: number;
@@ -27,13 +26,6 @@ export interface Tag {
   count: number;
 }
 
-interface ArticleIndex {
-  id: number;
-  slug: string;
-  filename: string;
-  status: string;
-}
-
 class DataService {
   private articles: Article[] = [];
   private categories: Category[] = [];
@@ -48,41 +40,21 @@ class DataService {
       // 获取正确的基础路径
       const baseUrl = process.env.PUBLIC_URL || '';
       
-      // 加载文章索引
-      const articlesIndexResponse = await fetch(`${baseUrl}/articles/index.json`);
-      if (!articlesIndexResponse.ok) {
-        throw new Error(`Failed to fetch articles index: ${articlesIndexResponse.status} ${articlesIndexResponse.statusText}`);
-      }
-      const articlesIndex: ArticleIndex[] = await articlesIndexResponse.json();
-
-      // 加载分类和标签数据
-      const [categoriesResponse, tagsResponse] = await Promise.all([
+      // 直接从articles.json加载所有文章数据
+      const [articlesResponse, categoriesResponse, tagsResponse] = await Promise.all([
+        fetch(`${baseUrl}/data/articles.json`),
         fetch(`${baseUrl}/data/categories.json`),
         fetch(`${baseUrl}/data/tags.json`)
       ]);
 
+      if (!articlesResponse.ok) {
+        throw new Error(`Failed to fetch articles: ${articlesResponse.status} ${articlesResponse.statusText}`);
+      }
+
+      // 直接解析文章数据，无需额外处理
+      this.articles = await articlesResponse.json();
       this.categories = await categoriesResponse.json();
       this.tags = await tagsResponse.json();
-
-      // 加载所有文章
-      const articlesPromises = articlesIndex.map(async (articleInfo) => {
-        try {
-          const response = await fetch(`${baseUrl}/articles/${articleInfo.filename}`);
-          if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-          }
-          
-          const markdownContent = await response.text();
-          const article = parseMarkdownArticle(markdownContent, articleInfo.id);
-          return article;
-        } catch (error) {
-          console.warn(`Failed to load article: ${articleInfo.filename}`, error);
-          return null;
-        }
-      });
-
-      const loadedArticles = await Promise.all(articlesPromises);
-      this.articles = loadedArticles.filter((article): article is Article => article !== null);
       
       // 调试信息
       console.log('🎯 Loaded articles details:', this.articles.map(a => ({
