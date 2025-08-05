@@ -1,8 +1,8 @@
 [
-  { "id": 1, "name": "公告", "slug": "announcements", "count": 1 },
-  { "id": 2, "name": "个人", "slug": "personal", "count": 2 },
-  { "id": 3, "name": "技术", "slug": "tech", "count": 2 },
-  { "id": 4, "name": "前端", "slug": "frontend", "count": 1 },
-  { "id": 5, "name": "后端", "slug": "backend", "count": 1 },
-  { "id": 6, "name": "学习", "slug": "learning", "count": 1 }
+  { "id": 1, "name": "announcements", "slug": "announcements", "count": 1 },
+  { "id": 2, "name": "personal", "slug": "personal", "count": 2 },
+  { "id": 3, "name": "personal", "slug": "personal", "count": 2 },
+  { "id": 4, "name": "personal", "slug": "personal", "count": 1 },
+  { "id": 5, "name": "backend", "slug": "backend", "count": 1 },
+  { "id": 6, "name": "learning", "slug": "learning", "count": 1 }
 ]

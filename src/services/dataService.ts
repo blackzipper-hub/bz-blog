@@ -1,9 +1,11 @@
-// 静态博客数据服务 - 从JSON文件加载
+// 静态博客数据服务 - 从Markdown文件加载
+
+import { loadMarkdownFile } from '../utils/markdownParser';
 
 export interface Article {
   id: number;
   title: string;
-  content: string;
+  content?: string; // 动态加载的内容
   excerpt: string;
   slug: string;
   status: string;
@@ -12,6 +14,7 @@ export interface Article {
   date: string;
   views: number;
   author: string;
+  file: string; // Markdown文件名
 }
 
 export interface Category {
@@ -83,13 +86,12 @@ class DataService {
     // 筛选已发布的文章
     filteredArticles = filteredArticles.filter(article => article.status === 'published');
 
-    // 搜索筛选
+    // 搜索筛选（只在标题和摘要中搜索，避免加载所有文章内容）
     if (filters?.search) {
       const search = filters.search.toLowerCase();
       filteredArticles = filteredArticles.filter(article =>
         article.title.toLowerCase().includes(search) ||
-        article.excerpt.toLowerCase().includes(search) ||
-        article.content.toLowerCase().includes(search)
+        article.excerpt.toLowerCase().includes(search)
       );
     }
 
@@ -142,13 +144,28 @@ class DataService {
     return article;
   }
 
-  // 根据slug获取文章
+  // 根据slug获取文章（包含完整内容）
   async getArticleBySlug(slug: string) {
     await this.initialize();
     const article = this.articles.find(article => article.slug === slug);
     if (!article) {
       throw new Error('Article not found');
     }
+
+    // 如果还没有加载内容，从markdown文件加载
+    if (!article.content && article.file) {
+      try {
+        console.log('📚 Loading markdown content for:', article.title);
+        const parsed = await loadMarkdownFile(article.file);
+        article.content = parsed.content;
+        console.log('✅ Content loaded successfully, length:', article.content.length);
+      } catch (error) {
+        console.error('❌ Failed to load markdown content:', error);
+        // 如果加载失败，使用excerpt作为内容
+        article.content = article.excerpt;
+      }
+    }
+
     return article;
   }
 

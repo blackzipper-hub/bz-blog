@@ -359,11 +359,17 @@ const ArticlePage: React.FC = () => {
   };
 
   const handleCategoryClick = (category: string) => {
-    navigate(`/category/${encodeURIComponent(category)}`);
+    const categorySlug = dataService.getCategorySlugByName(category);
+    if (categorySlug) {
+      navigate(`/category/${categorySlug}`);
+    }
   };
 
   const handleTagClick = (tag: string) => {
-    navigate(`/tag/${encodeURIComponent(tag)}`);
+    const tagSlug = dataService.getTagSlugByName(tag);
+    if (tagSlug) {
+      navigate(`/tag/${tagSlug}`);
+    }
   };
 
   if (loading) {
