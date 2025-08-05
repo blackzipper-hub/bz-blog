@@ -10,7 +10,7 @@
     "date": "2024-01-15",
     "views": 128,
     "author": "博主",
-    "file": "welcome-to-my-blog.md"
+    "file": "welcome-to-my-blog.txt"
   },
   {
     "id": 2,
@@ -23,7 +23,7 @@
     "date": "2024-01-10",
     "views": 256,
     "author": "博主",
-    "file": "react-hooks-guide.md"
+    "file": "react-hooks-guide.txt"
   },
   {
     "id": 3,
@@ -36,7 +36,7 @@
     "date": "2024-01-08",
     "views": 189,
     "author": "博主",
-    "file": "nodejs-setup-guide.md"
+    "file": "nodejs-setup-guide.txt"
   },
   {
     "id": 4,
@@ -49,6 +49,6 @@
     "date": "2024-01-05",
     "views": 342,
     "author": "博主",
-    "file": "my-programming-journey.md"
+    "file": "my-programming-journey.txt"
   }
 ]
